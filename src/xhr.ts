@@ -1,11 +1,12 @@
 /*
  * @Author: your name
  * @Date: 2021-08-05 09:10:20
- * @LastEditTime: 2021-08-05 11:29:18
+ * @LastEditTime: 2021-08-05 18:02:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \typescript-library-starter\src\xhr.ts
- */ import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
+ */ import { parseHeaders } from '../helper/headers'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from './types'
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise(resolve => {
     const { data = null, url, method = 'get', headers, responseType } = config
@@ -19,8 +20,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       if (request.readyState !== 4) {
         return
       }
-
-      const responseHeaders = request.getAllResponseHeaders()
+      const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData =
         responseType && responseType !== 'text' ? request.response : request.responseText
       const response: AxiosResponse = {

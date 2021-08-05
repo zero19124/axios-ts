@@ -1,20 +1,21 @@
 /*
  * @Author: your name
  * @Date: 2021-08-03 17:52:04
- * @LastEditTime: 2021-08-05 11:31:32
+ * @LastEditTime: 2021-08-05 18:04:28
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \typescript-library-starter\src\index.ts
  */
-import { AxiosRequestConfig } from './types'
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from './types'
 import xhr from './xhr'
 import { bulidURL } from '../helper/url'
-import { transformRequest } from '../helper/data'
+import { transformRequest, transformResponse } from '../helper/data'
 import { processHeaders } from '../helper/headers'
 function axios(config: AxiosRequestConfig): AxiosPromise {
   processConfig(config)
-  xhr(config)
-  return xhr(config)
+  return xhr(config).then(res => {
+    return transformResponseData(res)
+  })
 }
 
 function processConfig(config: AxiosRequestConfig): void {
@@ -34,6 +35,10 @@ function transformUrl(config: AxiosRequestConfig): string {
 function transformHeaders(config: AxiosRequestConfig) {
   const { headers = {}, data } = config
   return processHeaders(headers, data)
+}
+function transformResponseData(res: AxiosResponse): AxiosResponse {
+  res.data = transformResponse(res.data)
+  return res
 }
 
 export default axios

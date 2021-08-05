@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-08-05 11:10:41
- * @LastEditTime: 2021-08-05 11:13:23
- * @LastEditors: your name
+ * @LastEditTime: 2021-08-05 18:02:04
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \typescript-library-starter\helper\headers.ts
  */
@@ -31,4 +31,24 @@ export function processHeaders(headers: any, data: any): any {
     }
   }
   return headers
+}
+export function parseHeaders(headers: string): any {
+  let parsed = Object.create(null)
+  if (!headers) {
+    return parsed
+  }
+
+  headers.split('\r\n').forEach(line => {
+    let [key, val] = line.split(':')
+    key = key.trim().toLowerCase()
+    if (!key) {
+      return
+    }
+    if (val) {
+      val = val.trim()
+    }
+    parsed[key] = val
+  })
+
+  return parsed
 }
